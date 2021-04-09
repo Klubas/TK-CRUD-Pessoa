@@ -1,10 +1,6 @@
-import json
-import logging
 import os
 from dotenv import load_dotenv
-from tkinter import messagebox
-
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
 
 class DataBase:
@@ -39,7 +35,7 @@ class DataBase:
         )
 
         self.engine = \
-            self.engine.execution_options(isolation_level="SERIALIZABLE")
+            self.engine.execution_options(isolation_level="READ UNCOMMITTED")
 
         with self.engine.connect() as conn:
             pass
@@ -61,13 +57,28 @@ class DataBase:
         try:
             with self.engine.connect() as conn:
                 conn = conn.execution_options(
-                    isolation_level="SERIALIZABLE"
+                    isolation_level="READ UNCOMMITTED"
                 )
                 with conn.begin():
                     try:
                         result = conn.execute(sql)
-                        conn.commit()
-                        prc = True, result, str(sql)
+                        if confirm_to_commit:
+
+                            from tkinter import messagebox
+
+                            response = messagebox.askquestion(
+                                title="COMMIT", message="COMMIT?")
+
+                            if response == 'yes':
+                                conn.commit()
+                                prc = True, result, str(sql)
+                            else:
+                                conn.rollback()
+                                prc = False, 'Commit blocked by user', str(sql)
+
+                        else:
+                            conn.commit()
+                            prc = True, result, str(sql)
                     except Exception as e:
                         result = str(e)
                         conn.rollback()

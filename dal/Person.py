@@ -105,9 +105,9 @@ class Person:
     def delete(self):
         stmt = (
             delete(self.person_table).
-            where(self.person_table.c.tax_id == self.tax_id, confirm_to_commit=True)
+            where(self.person_table.c.tax_id == self.tax_id)
         )
-        result = self.db.execute_stmt(sql=stmt)
+        result = self.db.execute_stmt(sql=stmt, confirm_to_commit=True)
         if not result[0]:
             raise Exception(str(result[1]))
         return result

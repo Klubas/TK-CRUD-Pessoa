@@ -91,8 +91,12 @@ class PersonCrud(simpledialog.Dialog):
                                           , message="Tem certeza que deseja excluir esse cadastro?"
                                           , parent=self)
         if response == 'yes':
-            self.person.delete()
-            self.cancel()
+            try:
+                self.person.delete()
+                self.cancel()
+            except Exception as e:
+                from tkinter import messagebox
+                messagebox.showwarning(title="Alerta", message=str(e))
         else:
             pass
 
