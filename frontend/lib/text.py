@@ -1,10 +1,5 @@
 __texts__ = {
     "PTBR": {
-        "error_messages:": {
-            "alert": "Alerta",
-            "unexpected_error": "Erro inesperado!",
-        },
-
         "dbconfig": {
             "env_config": "Configuração de ambiente",
             "confirm": "Confirmar",
@@ -47,6 +42,11 @@ __texts__ = {
             "find_person": "Localizar Pessoa",
             "new_person": "Cadastrar Pessoa",
             "env_config": "Configuração de ambiente",
+            "alert": "Alerta",
+            "unexpected_error": "Erro inesperado!",
+            "required_fields": "Campos obrigatórios não preenchidos.",
+            "person_not_found": "Pessoa não encontrada!",
+            "tax_id_not_supplied": "Informe um CPF."
         }
 
 
@@ -56,8 +56,6 @@ __texts__ = {
 
 def _get_texts_(interface, lang="PTBR"):
     texts = __texts__.get(lang).get(interface)
-    print(interface)
-    print(texts)
     return texts
 
 
@@ -70,9 +68,20 @@ def get_string(texts=None, key=None):
         return text
     except Exception as e:
         print(str(e))
-        return None
+        return key
 
 
 def show_message(**kwargs):
     from tkinter import messagebox
-    messagebox.showwarning(**kwargs)
+    title = kwargs.get('title')
+    message = kwargs.get('message')
+
+    texts = _get_texts_(interface='main_window', lang='PTBR')
+
+    title = get_string(texts=texts, key=title)
+    message = get_string(texts=texts, key=message)
+
+    kwargs.pop('title')
+    kwargs.pop('message')
+
+    messagebox.showwarning(title=title, message=message)

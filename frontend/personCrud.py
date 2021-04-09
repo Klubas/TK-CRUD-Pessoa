@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import simpledialog
-from frontend.lib.text import _get_texts_, get_string
+from frontend.lib.text import _get_texts_, get_string, show_message
 from frontend.lib.components import LabeledEntry, Label, Frame, Button
 from dal.Person import Person
 
@@ -83,7 +83,7 @@ class PersonCrud(simpledialog.Dialog):
             super(PersonCrud, self).ok()
         except Exception as e:
             from tkinter import messagebox
-            messagebox.showwarning(title="Alerta", message=str(e))
+            show_message(title="Alerta", message=str(e))
 
     def delete(self):
         from tkinter import messagebox
@@ -96,7 +96,7 @@ class PersonCrud(simpledialog.Dialog):
                 self.cancel()
             except Exception as e:
                 from tkinter import messagebox
-                messagebox.showwarning(title="Alerta", message=str(e))
+                show_message(title="Alerta", message=str(e))
         else:
             pass
 

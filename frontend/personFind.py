@@ -21,15 +21,15 @@ class FindPerson(simpledialog.Dialog):
         #self.master.withdraw()
         self.tax_id = self.tax_id_entry.entry.get()
 
+        if not self.tax_id:
+            show_message(title="Alerta", message="tax_id_not_supplied", parent=self)
+            return False
+
         try:
             self.person = Person(select_by_tax_id=self.tax_id, db=self.db)
         except Exception as e:
             show_message(title="Alerta", message=str(e), parent=self)
             print(e)
-            return False
-
-        if not self.tax_id:
-            show_message(title="Alerta", message="tax_id_not_supplied", parent=self)
             return False
 
         if self.person.tax_id:

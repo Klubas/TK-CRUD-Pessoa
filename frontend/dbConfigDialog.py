@@ -19,7 +19,6 @@ class DBConfigDialog(simpledialog.Dialog):
         pass
 
     def cancel(self, event=None):
-        import sys
         super(DBConfigDialog, self).cancel()
 
     def apply(self):
