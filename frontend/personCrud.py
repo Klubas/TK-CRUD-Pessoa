@@ -9,6 +9,7 @@ texts = _get_texts_(interface="crud_person", lang="PTBR")
 
 class PersonCrud(simpledialog.Dialog):
     def __init__(self, master, db, person=None):
+        self.curr_action = 'I'
         self.db = db
         self.tax_id = None
         self.name = None
@@ -52,7 +53,7 @@ class PersonCrud(simpledialog.Dialog):
             if self.value_name == '' or self.value_tax_id == '' or self.value_email == '':
                 raise Exception("required_fields")
 
-            if self.person is None:
+            if self.curr_action == 'I':
 
                 self.person = Person(
                      db=self.db
@@ -68,7 +69,8 @@ class PersonCrud(simpledialog.Dialog):
                      , country=self.value_country
                 )
 
-            else:
+            elif self.curr_action == 'U':
+
                 self.person = self.person.update(
                      name=self.value_name
                      , document=self.value_document
@@ -81,23 +83,14 @@ class PersonCrud(simpledialog.Dialog):
                      , country=self.value_country
                 )
 
+            else:
+                raise Exception('curr_action {} inválida.'.format(self.curr_action))
+
             if not self.person.result[0]:
                 raise Exception(str(self.person.result[1]))
 
             super(PersonCrud, self).ok()
         except Exception as e:
-            self.value_name = None
-            self.value_tax_id = None
-            self.value_document = None
-            self.value_email = None
-            self.value_phone = None
-            self.value_street_name = None
-            self.value_address_number = None
-            self.value_district = None
-            self.value_complement = None
-            self.value_country = None
-            self.person = None
-
             from tkinter import messagebox
             show_message(title="alert", message=str(e))
 
@@ -195,6 +188,8 @@ class PersonCrud(simpledialog.Dialog):
                 , command=self.delete
                 , side="bottom"
             )
+
+            self.curr_action = 'U'
 
             if self.person.tax_id:
                 self.tax_id.entry.\
