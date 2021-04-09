@@ -61,11 +61,8 @@ def _get_texts_(interface, lang="PTBR"):
 
 def get_string(texts=None, key=None):
     try:
-        if texts is not None:
-            text = texts.get(key)
-        else:
-            text = key
-        return text
+        text = texts.get(key)
+        return text if text is not None else key
     except Exception as e:
         print(str(e))
         return key
@@ -81,7 +78,7 @@ def show_message(**kwargs):
     title = get_string(texts=texts, key=title)
     message = get_string(texts=texts, key=message)
 
-    kwargs.pop('title')
-    kwargs.pop('message')
+    kwargs['title'] = title
+    kwargs['message'] = message
 
-    messagebox.showwarning(title=title, message=message)
+    messagebox.showwarning(**kwargs)

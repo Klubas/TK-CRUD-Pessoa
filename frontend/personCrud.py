@@ -36,6 +36,7 @@ class PersonCrud(simpledialog.Dialog):
         super().__init__(master, title=get_string(texts, "new_person"))
     
     def ok(self, event=None):
+
         try:
             self.value_name = self.name.entry.get()
             self.value_tax_id = self.tax_id.entry.get()
@@ -48,10 +49,10 @@ class PersonCrud(simpledialog.Dialog):
             self.value_complement = self.complement.entry.get()
             self.value_country = self.country.entry.get()
 
-            if self.person is None:
+            if self.value_name == '' or self.value_tax_id == '' or self.value_email == '':
+                raise Exception("required_fields")
 
-                if self.value_name == '' or self.value_tax_id == '' or self.value_email == '':
-                    raise Exception("required_fields")
+            if self.person is None:
 
                 self.person = Person(
                      db=self.db
@@ -80,10 +81,25 @@ class PersonCrud(simpledialog.Dialog):
                      , country=self.value_country
                 )
 
+            if not self.person.result[0]:
+                raise Exception(str(self.person.result[1]))
+
             super(PersonCrud, self).ok()
         except Exception as e:
+            self.value_name = None
+            self.value_tax_id = None
+            self.value_document = None
+            self.value_email = None
+            self.value_phone = None
+            self.value_street_name = None
+            self.value_address_number = None
+            self.value_district = None
+            self.value_complement = None
+            self.value_country = None
+            self.person = None
+
             from tkinter import messagebox
-            show_message(title="Alerta", message=str(e))
+            show_message(title="alert", message=str(e))
 
     def delete(self):
         from tkinter import messagebox
@@ -96,7 +112,7 @@ class PersonCrud(simpledialog.Dialog):
                 self.cancel()
             except Exception as e:
                 from tkinter import messagebox
-                show_message(title="Alerta", message=str(e))
+                show_message(title="alert", message=str(e))
         else:
             pass
 

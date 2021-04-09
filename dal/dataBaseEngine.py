@@ -35,7 +35,7 @@ class DataBase:
         )
 
         self.engine = \
-            self.engine.execution_options(isolation_level="READ UNCOMMITTED")
+            self.engine.execution_options(isolation_level="REPEATABLE READ")
 
         with self.engine.connect() as conn:
             pass
@@ -57,7 +57,7 @@ class DataBase:
         try:
             with self.engine.connect() as conn:
                 conn = conn.execution_options(
-                    isolation_level="READ UNCOMMITTED"
+                    isolation_level="REPEATABLE READ"
                 )
                 with conn.begin():
                     try:
@@ -65,7 +65,6 @@ class DataBase:
                         if confirm_to_commit:
 
                             from tkinter import messagebox
-
                             response = messagebox.askquestion(
                                 title="COMMIT", message="COMMIT?")
 

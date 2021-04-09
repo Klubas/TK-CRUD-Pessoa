@@ -45,7 +45,7 @@ class DBConfigDialog(simpledialog.Dialog):
                 self.db = db[1]
                 self.ok()
             else:
-                show_message(title="Alerta", message=db[1], parent=self)
+                show_message(title="alert", message=db[1], parent=self)
 
         Label(
             master=self

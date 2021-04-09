@@ -34,9 +34,9 @@ class Person:
 
         if select_by_tax_id:
             self.tax_id = select_by_tax_id
-            self.select()
+            self.result = self.select()
         else:
-            self.insert()
+            self.result = self.insert()
 
     def select(self):
         stmt = select(
@@ -127,10 +127,11 @@ class Person:
                 , country=self.country
             )
         )
-        result = self.db.execute_stmt(sql=stmt, confirm_to_commit=True)
+        return self.db.execute_stmt(sql=stmt, confirm_to_commit=True)
         if not result[0]:
             raise Exception(str(result[1]))
-        return result
+        else:
+            return result
 
     def _create_table_(self):
         with self.engine.begin():

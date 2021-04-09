@@ -22,13 +22,13 @@ class FindPerson(simpledialog.Dialog):
         self.tax_id = self.tax_id_entry.entry.get()
 
         if not self.tax_id:
-            show_message(title="Alerta", message="tax_id_not_supplied", parent=self)
+            show_message(title="alert", message="tax_id_not_supplied", parent=self)
             return False
 
         try:
             self.person = Person(select_by_tax_id=self.tax_id, db=self.db)
         except Exception as e:
-            show_message(title="Alerta", message=str(e), parent=self)
+            show_message(title="alert", message=str(e), parent=self)
             print(e)
             return False
 
@@ -36,7 +36,7 @@ class FindPerson(simpledialog.Dialog):
             dialog = PersonCrud(master=self, db=self.db, person=self.person)
             return True
 
-        show_message(title="Alerta", message="person_not_found", parent=self)
+        show_message(title="alert", message="person_not_found", parent=self)
         return False
 
         #self.master.deiconify()
